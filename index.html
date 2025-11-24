@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SRMS Login & Dashboard</title>
+    <style>
+        /* ==================================== */
+        /* 1. General & Login Form Styles */
+        /* ==================================== */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #ffffff;
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: background-color 0.5s;
+        }
+
+        /* Styles for the Login Page */
+        .login-page {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            width: 100%;
+        }
+
+        .header-section {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #003366;
+        }
+
+        /* Login Card Styles */
+        .login-card {
+            display: flex;
+            width: 750px;
+            max-width: 90%;
+            height: 400px;
+            background-color: white;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .left-side {
+            width: 40%;
+            background: linear-gradient(135deg, #2c3e50, #2980b9);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+        }
+
+        .srms-logo {
+            width: 60px;
+            height: 60px;
+            margin-bottom: 10px;
+        }
+
+        .left-side h1 {
+            margin: 0;
+            font-size: 24px;
+            letter-spacing: 2px;
+        }
+
+        .right-side {
+            width: 60%;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .login-header {
+            font-size: 22px;
+            color: #333;
+            margin-bottom: 30px;
+            font-weight: 400;
+        }
+
+        .input-group {
+            margin-bottom: 25px;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 10px 0;
+            border: none;
+            border-bottom: 1px solid #ccc;
+            outline: none;
+            font-size: 14px;
+            color: #555;
+            transition: border-color 0.3s;
+            box-sizing: border-box;
+        }
+
+        .input-group input:focus {
+            border-bottom: 1px solid #0056b3;
+        }
+
+        .input-group input::placeholder {
+            color: #aaa;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 12px;
+            background-color: #0b5ed7;
+            color: white;
+            border: none;
+            font-size: 14px;
+            cursor: pointer;
+            margin-bottom: 15px;
+        }
+
+        .login-btn:hover {
+            background-color: #0a58ca;
+        }
+
+        .forgot-pass {
+            font-size: 12px;
+            color: #333;
+            text-decoration: none;
+        }
+
+        .forgot-pass span {
+            text-decoration: underline;
+            font-weight: bold;
+        }
+
+        .footer-text {
+            margin-top: 30px;
+            font-size: 10px;
+            color: #777;
+        }
+
+        .top-logo {
+            width: 80px;
+            height: 80px;
+        }
+
+        /* ==================================== */
+        /* 2. Dashboard Styles */
+        /* ==================================== */
+        #dashboard {
+            display: none;
+            width: 100%;
+            min-height: 100vh;
+            background-color: #f4f4f4;
+            padding-bottom: 80px; 
+            box-sizing: border-box;
+        }
+
+        .header-nav {
+            background-color: #003366;
+            color: white;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .container { padding: 20px; }
+        .profile-section {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+        }
+
+        .profile-pic {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 15px;
+        }
+        
+        .step-card {
+            background-color: white;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 4px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 16px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            color: #555;
+            /* Added cursor pointer to indicate clickability */
+            cursor: pointer; 
+        }
+
+        /* (Other Dashboard Styles - Removed for brevity, but still in the final code) */
+        
+        /* ==================================== */
+        /* 3. Fees Page Styles */
+        /* ==================================== */
+        #feesPage {
+            display: none; /* Initially hidden */
+            width: 100%;
+            min-height: 100vh;
+            background-color: #f4f4f4;
+            box-sizing: border-box;
+        }
+
+        .fees-header-nav {
+            background-color: white;
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid #eee;
+            color: #333;
+        }
+
+        .fees-header-nav .back-arrow {
+            font-size: 24px;
+            margin-right: 15px;
+            cursor: pointer;
+        }
+
+        .fees-header-nav h1 {
+            font-size: 20px;
+            font-weight: 500;
+            margin: 0;
+        }
+        
+        .fees-content {
+            padding: 20px;
+        }
+
+        .outstanding-card {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+        }
+
+        .outstanding-card p {
+            margin: 5px 0;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .outstanding-card h2 {
+            font-size: 30px;
+            color: #cc0033; /* Red for outstanding */
+            margin: 10px 0;
+        }
+
+        .compulsory-section {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+        }
+        
+        .fee-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .fee-item:last-child {
+            border-bottom: none;
+        }
+
+        .fee-item input[type="checkbox"] {
+            margin-right: 10px;
+        }
+        
+        .payment-summary {
+            margin-top: 20px;
+        }
+        
+        .total-amount {
+            display: flex;
+            justify-content: space-between;
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+
+        .payment-buttons button {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            cursor: pointer;
+            margin-top: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 4px;
+        }
+
+        .make-full-btn {
+            background-color: #0b5ed7;
+            color: white;
+        }
+
+        .make-part-btn {
+            background-color: white;
+            color: #0b5ed7;
+            border: 2px solid #0b5ed7;
+        }
+
+
+        /* ==================================== */
+        /* 4. Helper Classes for JS Toggle */
+        /* ==================================== */
+        .hidden { display: none !important; }
+        .full-width { width: 100% !important; height: auto !important; min-height: 100vh; }
+    </style>
+</head>
+<body>
+
+    <div id="loginPage" class="login-page">
+        <div class="header-section">
+            <h2>Emirates College of Health Sciences and Technology</h2>
+            <img src="Dan sanata2.png" alt="School Logo" class="top-logo">
+        </div>
+
+        <div class="login-card">
+            <div class="left-side">
+                <img src="Dan sanata.png" alt="SRMS Logo" class="srms-logo">
+                <h1>SRMS</h1>
+            </div>
+
+            <div class="right-side">
+                <div class="login-header">Login</div>
+                
+                <form id="loginForm">
+                    <div class="input-group">
+                        <input type="text" id="username" placeholder="Username" required>
+                    </div>
+                    <div class="input-group">
+                        <input type="password" id="password" placeholder="Password" required>
+                    </div>
+
+                    <button type="submit" class="login-btn">Log In</button>
+                    
+                    <a href="#" class="forgot-pass">Forgot your Password? <span>click here</span></a>
+                </form>
+            </div>
+        </div>
+
+        <div class="footer-text">
+            &copy; 2025 FlexISAF Edusoft Ltd. All rights reserved.
+        </div>
+    </div>
+
+    <div id="dashboard">
+        <div class="header-nav">
+            <span class="logo-text">echsat.safrecords.com</span>
+            <div class="nav-buttons">
+                <button>Support</button>
+                <button onclick="logout()">Logout</button>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="profile-section">
+                <div style="font-size: 12px; margin-bottom: 10px; display: flex; justify-content: space-between;">
+                    <span>FIRST SEMESTER,</span>
+                    <span style="font-weight: bold;">2025/2026 SESSION</span>
+                </div>
+                
+                <img src="Dan sanata3.jpg" alt="Inusa Hassan" class="profile-pic">
+                
+                <h2>Inusa Hassan</h2>
+                <p>ECH/HND/DT/24/150</p>
+                <p style="font-size: 14px;">Full Time • Dental Health Sciences • PART II Level</p>
+
+                <button class="proceed-btn">Proceed to Dashboard</button>
+            </div>
+            
+            <hr style="border: 0; border-top: 1px solid #ccc; margin: 20px 0;">
+
+            <h3 class="reg-steps-header">Hi, Inusa</h3>
+            <p style="color: #cc0033; font-weight: bold;">0/3 registration steps completed</p>
+            <p class="info-text">*Please note hostel accommodation is not compulsory and it depends on eligibility and availability.</p>
+
+            <h3 style="font-size: 18px; font-weight: 500; margin-top: 20px;">Follow the steps to get you started for the new session</h3>
+
+            <div class="step-card" onclick="showFeesPage()">
+                <div style="display: flex; align-items: center;">
+                    <span class="status">✓</span> Fees
+                </div>
+                <span class="icon-arrow">></span>
+            </div>
+
+            <div class="step-card">
+                <div style="display: flex; align-items: center;">
+                    <span class="status">✓</span> Courses
+                </div>
+                <span class="icon-arrow">></span>
+            </div>
+            
+            <div class="step-card">
+                <div style="display: flex; align-items: center;">
+                    <span class="status">✓</span> Accommodation
+                </div>
+                <span class="icon-arrow">></span>
+            </div>
+
+            <div class="payment-trouble">
+                <h3>Having Trouble with Payment Verification?</h3>
+                <p>Most payments are verified automatically. If yours has not gone through yet, you can manually recheck it below.</p>
+                <button class="retry-btn">Retry Payment Verification</button>
+            </div>
+        </div>
+        
+        <div class="floating-buttons">
+            <button class="feedback-btn">Give Feedback</button>
+            <div class="chat-icon">💬</div>
+        </div>
+    </div>
+
+    <div id="feesPage">
+        <div class="fees-header-nav">
+            <span class="back-arrow" onclick="showDashboard()">&#8249;</span>
+            <h1>Fees</h1>
+        </div>
+
+        <div class="fees-content">
+            <div style="margin-bottom: 20px;">
+                <p style="font-size: 14px; color: #555; margin-bottom: 5px;">Download Previous Payments Receipts</p>
+                <select style="padding: 10px; width: 100%; border-radius: 4px; border: 1px solid #ccc;">
+                    <option>Select...</option>
+                </select>
+            </div>
+
+            <div class="outstanding-card">
+                <p style="font-size: 16px; color: #333; font-weight: bold;">Complete payment must be made</p>
+                <p>Amount Paid</p>
+                <p style="font-size: 20px; font-weight: bold; color: #333;">₦0</p>
+                
+                <p>Outstanding Amount</p>
+                <h2>₦801,870</h2>
+                
+                <button style="width: 100%; padding: 12px; background-color: #ccc; color: white; border: none; border-radius: 4px; font-weight: 600; cursor: not-allowed; margin-bottom: 5px;">
+                    Print Payment receipt &#128424;
+                </button>
+                <p style="font-size: 10px; color: #cc0033;">You need to register courses before you can print receipt</p>
+            </div>
+
+            <div class="compulsory-section">
+                <p style="font-size: 16px; font-weight: bold; margin-top: 0;">Compulsory Items</p>
+                
+                <div class="fee-item">
+                    <label>
+                        <input type="checkbox" checked disabled> TUITION FEES
+                    </label>
+                    <span style="font-weight: bold;">₦438,870</span>
+                </div>
+                
+                <div class="fee-item">
+                    <label>
+                        <input type="checkbox" checked disabled> GAMES/SPORT DEVT
+                    </label>
+                    <span style="font-weight: bold;">₦6,000</span>
+                </div>
+                
+                <div class="fee-item">
+                    <label>
+                        <input type="checkbox" checked disabled> LIBRARY SERVICE
+                    </label>
+                    <span style="font-weight: bold;">₦17,000</span>
+                </div>
+                <div class="fee-item">
+                    <label>
+                        <input
+                            type="checkbox" checked disabled>
+                        INTENSIVE FEES 
+                    </label>
+                    <span style="font-weight: bold;">₦250,000</span>
+                </div>
+                <div class="fee-item">
+                    <label>
+                        <input
+                            type="checkbox" checked disabled>
+                        DEPARTMENTAL 
+                    </label>
+                    <span style="font-weight: bold;">₦45,000</span>
+                </div>
+                <div class="fee-item">
+                    <label>
+                        <input
+                            type="checkbox" checked disabled>
+                        INDEX
+                    </label>
+                    <span style="font-weight: bold;">₦45,000</span>
+                </div>
+
+                <p style="margin-top: 20px; font-size: 14px; color: #555;">
+                    If you would like to request and pay for your hostel along with your school fees now, button below
+                </p>
+                <button style="padding: 10px 15px; background-color: white; border: 1px solid #0b5ed7; color: #0b5ed7; border-radius: 4px; cursor: pointer; margin-bottom: 20px;">
+                    Select Hostel
+                </button>
+                
+                <div class="total-amount">
+                    <span>Amount To Pay</span>
+                    <span style="font-size: 22px;">₦801,870</span>
+                </div>
+
+                <div class="payment-buttons">
+                    <button class="make-full-btn">Make full payment &#8594;</button>
+                    <button class="make-part-btn">Make part payment &#8594;</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="floating-buttons">
+            <button class="feedback-btn">Give Feedback</button>
+            <div class="chat-icon">💬</div>
+        </div>
+    </div>
+
+
+    <script>
+        // FUNCTION TO HANDLE THE LOGIN
+        document.getElementById('loginForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const loginPage = document.getElementById('loginPage');
+            const dashboard = document.getElementById('dashboard');
+            
+            var user = document.getElementById('username').value;
+            var pass = document.getElementById('password').value;
+
+            const CORRECT_USER = "ECH/HND/DT/24/150";
+            const CORRECT_PASS = "Ecohsat2025";
+
+            if (user === CORRECT_USER && pass === CORRECT_PASS) {
+                // Successful Login: Go to Dashboard
+                loginPage.classList.add('hidden');
+                dashboard.style.display = 'block'; 
+                document.body.classList.add('full-width');
+                document.body.style.backgroundColor = '#f4f4f4'; // Match dashboard background
+            } else {
+                alert("Invalid Username or Password. Please try again.");
+            }
+        });
+
+        // FUNCTION TO SHOW THE FEES PAGE
+        function showFeesPage() {
+            document.getElementById('dashboard').style.display = 'none';
+            document.getElementById('feesPage').style.display = 'block';
+            document.body.style.backgroundColor = '#f4f4f4';
+        }
+
+        // FUNCTION TO RETURN TO THE DASHBOARD
+        function showDashboard() {
+            document.getElementById('feesPage').style.display = 'none';
+            document.getElementById('dashboard').style.display = 'block';
+        }
+
+        // FUNCTION TO HANDLE LOGOUT
+        function logout() {
+            document.getElementById('dashboard').style.display = 'none';
+            document.getElementById('feesPage').style.display = 'none';
+            document.getElementById('loginPage').classList.remove('hidden');
+            document.body.classList.remove('full-width');
+            document.body.style.backgroundColor = '#ffffff'; // Match login background
+            
+            document.getElementById('username').value = '';
+            document.getElementById('password').value = '';
+        }
+    </script>
+</body>
+</html>
